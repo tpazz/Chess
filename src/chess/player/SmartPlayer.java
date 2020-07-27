@@ -54,6 +54,11 @@ public class SmartPlayer extends Player {
     @Override
     public boolean makeMove() {
         //TODO
+        // check if any piece is in danger and either eliminate the threat by checking if any of the
+        // aggressive moves contain a worthy move for the take, otherwise move the piece out of danger
+        // if no piece is in danger ...
+        // create descending list of highest value 'take' moves, followed by a list of moves
+        // that do not put that piece in danger, followed by ascending list of piece value
         AggressivePlayer tmp = new AggressivePlayer("tmp", getPieces(), getBoard(), getOpponent());
         ArrayList<Move> aggressiveMoves = getAggressiveMoves();
         if (aggressiveMoves.size() != 0) {
