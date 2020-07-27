@@ -33,7 +33,7 @@ public class RandomPlayer extends Player {
 		
 		// use HumanPlayer's do move method with RandomPlayer's generateRandomMove method to 
 		// execute a random move
-		HumanPlayer.doMove(generateRandomMove(getPieces()), getBoard(), getOpponent());
+		doMove(generateRandomMove(getPieces()), getBoard(), getOpponent());
 		
 		return true; // always executes a valid move
 	}
@@ -41,8 +41,7 @@ public class RandomPlayer extends Player {
 	public static Move generateRandomMove(Pieces p) {
 		
 		// create an ArrayList of potential random moves
-		ArrayList<Move> potentialRandomMoves = new ArrayList<Move>();
-		Move randomMove;
+		ArrayList<Move> potentialRandomMoves;
 		int randomPieceNo;
 		Piece randomPiece;
 		boolean validRandom = false;
@@ -60,7 +59,6 @@ public class RandomPlayer extends Player {
 		// populate the potential random moves ArrayList with the random piece's available moves
 		potentialRandomMoves = randomPiece.availableMoves();
 		// return a random move from the list
-		return randomMove = potentialRandomMoves.get
-				((int)(Math.random() * potentialRandomMoves.size()));
+		return potentialRandomMoves.get((int)(Math.random() * potentialRandomMoves.size()));
 	}
 }

@@ -3,9 +3,7 @@ package chess;
 import chess.board.Board;
 import chess.board.TextDisplay;
 import chess.piece.*;
-import chess.player.AggressivePlayer;
-import chess.player.HumanPlayer;
-import chess.player.RandomPlayer;
+import chess.player.*;
 import sheffield.*;
 
 /*
@@ -43,25 +41,32 @@ public class Chess {
 		screen.println();
 		screen.println("~~~~~~~~~~~~~~~~~~~~ Chess ~~~~~~~~~~~~~~~~~~~~");
 		screen.println();
-		screen.println("Player vs. Player ~ 'P' | Random AI ~ 'R' | Aggressive AI ~ 'A'");
+		screen.println("Player vs. Player ~ 'P' | Random AI ~ 'R' | Aggressive AI ~ 'A' | Smart AI ~ 'S'");
 		screen.println();
 		
 		// read input to initiate a game vs selected player
 		char o = keyboard.readChar("Please enter an opponent: ");
 			
 		if (o == 'P' || o == 'p') {
-			
 			startNewPvP();
 		}
 		
 		else if (o == 'R' || o == 'r') {
-			
-			startNewRandomAi();
+			RandomPlayer playerTwo = new RandomPlayer("Random AI", blackPieces, chess, playerOne);
+			playerOne.setOpponent(playerTwo);
+			startAiOpponent(playerTwo);
 		}
 		
 		else if (o == 'A' || o == 'a') {
-			
-			startAggressiveAi();
+			AggressivePlayer playerTwo = new AggressivePlayer("Aggressive AI", blackPieces, chess, playerOne);
+			playerOne.setOpponent(playerTwo);
+			startAiOpponent(playerTwo);
+		}
+
+		else if (o == 'S' || o == 's') {
+			SmartPlayer playerTwo = new SmartPlayer("Smart AI", blackPieces, chess, playerOne);
+			playerOne.setOpponent(playerTwo);
+			startAiOpponent(playerTwo);
 		}
 	}
 	
@@ -141,20 +146,15 @@ public class Chess {
 		
 		setUpBoard(); // display winning move
 	}
-	
-	// method for Player vs Random AI game
-	public static void startNewRandomAi() {
-		
-		RandomPlayer playerTwo = new RandomPlayer("Random AI", blackPieces, chess, playerOne);
-		playerOne.setOpponent(playerTwo);
-			
+
+	public static void startAiOpponent(Player playerTwo) {
 		boolean winner = false;
 		int player = 1;
-		
+
 		do {
 			setUpBoard();  // display current state of the board after each player's move
-			
-			if (player == 1) { 
+
+			if (player == 1) {
 				screen.println();
 				screen.println("<--- " + playerOne.toString() + "'s move (TOP)" + " --->");
 				// request a move from player one
@@ -165,81 +165,30 @@ public class Chess {
 				else
 					// set to player 2's turn if player 1's move was successful
 					player = 2;
-			} 
-			
+			}
+
 			else if (player == 2) {
 				screen.println();
 				screen.println("<--- " + playerTwo.toString() + "'s move (BOTTOM)" + " --->");
 				playerTwo.makeMove(); // will return true
 				player = 1;
-			} 
-			
-			// loop until either player 1 or 2 no longer has a king piece 
+			}
+
+			// loop until either player 1 or 2 no longer has a king piece
 			if (!checkKing(playerTwo.getPieces())) {
 				screen.println();
 				screen.println(playerOne.toString() + " wins!");
 				winner = true;
 			}
-			
+
 			if (!checkKing(playerOne.getPieces())) {
 				screen.println();
 				screen.println(playerTwo.toString() + " wins!");
 				winner = true;
 			}
-			
+
 		}	while (!winner);
-		
+
 		setUpBoard(); // display winning move
 	}
-	
-	// method for Player vs Aggressive AI
-	public static void startAggressiveAi() {
-		
-		AggressivePlayer playerTwo = new AggressivePlayer("Aggressive AI", blackPieces, chess, playerOne);
-		playerOne.setOpponent(playerTwo);
-			
-		boolean winner = false;
-		int player = 1;
-		
-		do {
-			setUpBoard(); // display current state of the board after each player's move
-			
-			if (player == 1) { 
-				screen.println();
-				screen.println("<--- " + playerOne.toString() + "'s move (TOP)" + " --->");
-				// request a move from player one
-				if (!playerOne.makeMove()) {
-					screen.println();
-					screen.println("Please enter a valid move ~");
-				}
-				else
-					// set to player 2's turn if player 1's move was successful
-					player = 2;
-			} 
-			
-			else if (player == 2) {
-				screen.println();
-				screen.println("<--- " + playerTwo.toString() + "'s move (BOTTOM)" + " --->");
-				playerTwo.makeMove(); // will return true
-				player = 1;
-			} 
-			
-			// loop until either player 1 or 2 no longer has a king piece 
-			if (!checkKing(playerTwo.getPieces())) {
-				screen.println();
-				screen.println(playerOne.toString() + " wins!");
-				winner = true;
-			}
-			
-			if (!checkKing(playerOne.getPieces())) {
-				screen.println();
-				screen.println(playerTwo.toString() + " wins!");
-				winner = true;
-			}
-			
-		}	while (!winner);
-		
-		setUpBoard(); // display winning move
-	}
-		
 }

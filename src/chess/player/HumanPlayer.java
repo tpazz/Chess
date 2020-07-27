@@ -121,28 +121,15 @@ public class HumanPlayer extends Player {
 			// inverse the value as chess coordinates are in descending order
 			return Math.abs(Integer.parseInt(x) - 8);
 	}
-	
-	
+
 	// method that returns false if supplied string is not a number
 	public boolean isNumeric(String x) {
 		try {
-			double i = Double.parseDouble(x);
+			Double.parseDouble(x);
 		}
 		catch(NumberFormatException nfe) {
 			return false;
 		}
 		return true;
-	}
-
-	
-	// public method to execute move (set/remove position)
-	public static void doMove(Move m, Board b, Player o) {
-		// delete the piece from the opponents collection if take
-		if (m.getTake()) 
-			o.deletePiece(b.getPiece(m.getNewX(), m.getNewY()));
-		
-		b.setPosition(m.getNewX(), m.getNewY(), b.getPiece(m.getCurrentX(), m.getCurrentY()));
-		b.removePosition(m.getCurrentX(), m.getCurrentY());
-		
 	}
 }

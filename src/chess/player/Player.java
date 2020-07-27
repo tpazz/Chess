@@ -1,8 +1,11 @@
 package chess.player;
 
 import chess.board.Board;
+import chess.board.Move;
 import chess.piece.Piece;
 import chess.piece.Pieces;
+
+import java.util.ArrayList;
 
 /*
  * Player.java  2.1 26/02/2018
@@ -34,9 +37,17 @@ public abstract class Player {
         board = b;
         opponent = o;
     }
-    
+
     // get and set methods
-    
+
+    public int getCurrentPosPieceValue(Move m) {
+        return getBoard().getPiece(m.getCurrentX(), m.getCurrentY()).getValue();
+    }
+
+    public int getNextPosPieceValue(Move m) {
+        return getBoard().getPiece(m.getNewX(), m.getNewY()).getValue();
+    }
+
     public Board getBoard() {
         return board;
     }
@@ -67,9 +78,42 @@ public abstract class Player {
         return name;
     }
 
-	public boolean checkKing() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+    public boolean checkKing() {
+        // TODO Auto-generated method stub
+        return false;
+    }
 
+    public ArrayList<Move> getAllPotentialMoves() {
+        ArrayList<Move> allPotentialMoves = new ArrayList<>();
+        for (int i = 0; i < getPieces().getNumPieces(); i++) {
+            Piece p = getPieces().getPiece(i);
+            // cannot populate null moves
+            if (p.availableMoves() != null)
+                allPotentialMoves.addAll(p.availableMoves());
+        }
+        return allPotentialMoves;
+    }
+
+    public ArrayList<Move> getAggressiveMoves() {
+        ArrayList<Move> aggressiveMoves = new ArrayList<Move>();
+        for (int i = 0; i < getAllPotentialMoves().size(); i++) {
+            Move theMove = getAllPotentialMoves().get(i);
+            if (theMove.getTake())
+                // populate aggressiveMoves with moves from allPotentialMoves that take a piece
+                aggressiveMoves.add(theMove);
+        }
+        return aggressiveMoves;
+    }
+
+    // public method to execute move (set/remove position)
+    public void doMove(Move m, Board b, Player o) {
+        // delete the piece from the opponents collection if take
+        if (m.getTake())
+            o.deletePiece(b.getPiece(m.getNewX(), m.getNewY()));
+
+        b.setPosition(m.getNewX(), m.getNewY(), b.getPiece(m.getCurrentX(), m.getCurrentY()));
+        b.removePosition(m.getCurrentX(), m.getCurrentY());
+
+    }
 }
+

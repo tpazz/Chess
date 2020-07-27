@@ -64,9 +64,9 @@ public class Pawn extends Piece {
             whiteMoves.add(theMove);
         }
 
-        // second legal move is to go from x,y to x,y+2 if x,y+2 is unoccupied
+        // second legal move is to go from x,y to x,y+2 if x,y+2 or y+1 is unoccupied
         // and pawn is on starting row 1
-        if ((y == 1) && (!getBoard().occupied(x, y + 2))) {
+        if ((y == 1) && (!(getBoard().occupied(x, y + 2)) && (getBoard().occupied(x, y + 1)))) {
             theMove = new Move(this, x, y, x, y + 2, false);
             whiteMoves.add(theMove);
         }
